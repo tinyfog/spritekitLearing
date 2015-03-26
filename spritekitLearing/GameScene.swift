@@ -10,36 +10,27 @@ import SpriteKit
 
 class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 65;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
-        
-        self.addChild(myLabel)
+        physicsWorld.gravity = CGVectorMake(0, -9.8)
+
+        let sceneBody = SKPhysicsBody(edgeLoopFromRect: frame.self)
+        sceneBody.friction = 0
+        self.physicsBody = sceneBody
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        /* Called when a touch begins */
-        
-        for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            
-            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-            
-            sprite.xScale = 0.5
-            sprite.yScale = 0.5
-            sprite.position = location
-            
-            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-            
-            sprite.runAction(SKAction.repeatActionForever(action))
-            
-            self.addChild(sprite)
+        for touch: AnyObject in touches{
+            var positionOfTouch = touch.locationInNode(self)
+
+            var ball = SKShapeNode(circleOfRadius: 25)
+            ball.fillColor = SKColor.redColor()
+            ball.position = positionOfTouch
+            ball.physicsBody = SKPhysicsBody(circleOfRadius: 25)
+            ball.physicsBody?.affectedByGravity = true
+            ball.physicsBody?.restitution = 1
+            ball.physicsBody?.linearDamping = 0
+            addChild(ball)
         }
-    }
+            }
    
-    override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
-    }
+
 }
