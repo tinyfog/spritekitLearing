@@ -8,13 +8,25 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene,SKPhysicsContactDelegate {
     override func didMoveToView(view: SKView) {
         physicsWorld.gravity = CGVectorMake(0, -9.8)
+        physicsWorld.contactDelegate = self
 
         let sceneBody = SKPhysicsBody(edgeLoopFromRect: frame.self)
         sceneBody.friction = 0
         self.physicsBody = sceneBody
+
+        let ShowPicture = SKSpriteNode(imageNamed: "Show")
+        ShowPicture.position = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
+        ShowPicture.physicsBody = SKPhysicsBody(rectangleOfSize: ShowPicture.size)
+        ShowPicture.physicsBody?.dynamic = false
+        addChild(ShowPicture)
+
+        let actionRotate = SKAction.rotateByAngle(3.14, duration: 10)
+//        println(M_PI)
+        ShowPicture.runAction(SKAction.repeatActionForever(actionRotate))
+
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -31,6 +43,5 @@ class GameScene: SKScene {
             addChild(ball)
         }
             }
-   
 
 }
